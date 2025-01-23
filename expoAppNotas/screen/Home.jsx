@@ -28,25 +28,16 @@ export default function Home({ navigation }) {
 
   // Renderizar cada nota
   const renderNote = ({ item }) => (
-    <View style={homeStyles.noteCard}>
-      <Text style={homeStyles.noteTitle}>{item.titulo}</Text>
-      <Text style={homeStyles.noteDate}>{item.fecha}</Text>
-      <Text style={homeStyles.noteShortDes}>{item.descripcionCorta}</Text>
-    </View>
+    <TouchableOpacity style={homeStyles.noteCard}
+    onPress={()=>navigation.navigate('DetailsNotes',{note:item})} >
+      <View>
+        <Text style={homeStyles.noteTitle}>{item.titulo}</Text>
+        <Text style={homeStyles.noteDate}>{item.fecha}</Text>
+        <Text style={homeStyles.noteShortDes}>{item.descripcionCorta}</Text>
+      </View>
+    </TouchableOpacity>
   );
 
-  // Limpiar todas las notas de AsyncStorage
-  const clearNotes = async () => {
-    try {
-      await AsyncStorage.removeItem("notas");
-      setNotes([]); // Actualizar el estado para reflejar los cambios
-      console.log("Datos bajo la clave 'notas' eliminados.");
-      Alert.alert("Notas eliminadas", "Todas las notas han sido borradas.");
-    } catch (error) {
-      console.error("Error al limpiar las notas:", error);
-      Alert.alert("Error", "No se pudieron borrar las notas.");
-    }
-  };
 
   return (
     <View style={homeStyles.main}>
@@ -63,12 +54,7 @@ export default function Home({ navigation }) {
         renderItem={renderNote}
         contentContainerStyle={homeStyles.listContainer}
       />
-      <TouchableOpacity
-        onPress={clearNotes}
-        style={homeStyles.buttonClear}
-      >
-        <Text style={homeStyles.textButtonClear}>Borrar Todas las Notas</Text>
-      </TouchableOpacity>
+     
     </View>
   );
 }

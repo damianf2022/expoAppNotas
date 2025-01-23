@@ -10,11 +10,28 @@ import { useState } from "react";
 import { createNoteStyle } from "../styles/createStyle";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import DateTimerpicker from "@react-native-community/datetimepicker";
+
 export default function CreateNote({ navigation }) {
   const [titulo, setTitulo] = useState("");
   const [descripcionCorta, setDescripcionCorta] = useState("");
   const [fecha, setFecha] = useState("");
   const [descripcion, setDescripcion] = useState("");
+
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const showDatePickerHandler = () => {
+    setShowDatePicker(true);
+  };
+  const onDateChange = (event, date) => {
+    setShowDatePicker(false);
+    //setShowDatePicker(Platform.OS ==='ios')//para ios mantenga abierto
+    if (event.type !== "dismissed" && date) {
+      setSelectedDate(date);
+      setFecha(date.toLocaleDateString("es-ES"));
+    }
+  };
 
   const saveNote = async () => {
     if (!titulo || !descripcionCorta || !fecha || !descripcion) {
@@ -70,13 +87,32 @@ export default function CreateNote({ navigation }) {
             onChangeText={setDescripcionCorta} // Cambiado a onChangeText
             style={createNoteStyle.input}
           />
-          <TextInput
-            placeholder="Fecha"
-            placeholderTextColor="slategray"
-            value={fecha}
-            onChangeText={setFecha} // Cambiado a onChangeText
+
+          <TouchableOpacity
             style={createNoteStyle.input}
-          />
+            onPress={showDatePickerHandler}
+          >
+            <TextInput
+              style={{ marginTop: 10 }}
+              placeholder="Fecha"
+              placeholderTextColor="slategray"
+              value={fecha}
+              onChangeText={setFecha}
+              editable={false}
+            />
+          </TouchableOpacity>
+
+          {/*selector de fecha*/}
+          {showDatePicker && (
+            <DateTimerpicker
+              value={selectedDate}
+              mode="date"
+              display="default"
+              onChange={onDateChange}
+              minimumDate={new Date()}
+            />
+          )}
+
           <TextInput
             placeholder="Descripción"
             placeholderTextColor="slategray"

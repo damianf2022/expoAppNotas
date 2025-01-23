@@ -61,4 +61,15 @@ export const createNoteStyle = StyleSheet.create({
     fontWeight: "300",
     marginTop: 15,
   },
+  createNoteStyle:{
+    input:{
+      width: "100%",
+      height: 50,
+      borderRadius: 25,
+      backgroundColor: "#D9D9D9",
+      paddingHorizontal: 15,
+      marginVertical: 10,
+      color: "#000",
+    }
+  }
 });
